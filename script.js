@@ -30,6 +30,16 @@ let paddleWidthModified = config.paddleWidth; // Largeur actuelle de la raquette
 let ballSpeedModified = config.ballSpeed;     // Vitesse actuelle de la balle
 let effectTimer = null;                       // Minuterie pour les effets temporaires
 
+
+const paddleHitSound = new Audio('sounds/paddle-hit.mp3');
+const brickHitSound = new Audio('sounds/brick-hit.mp3');
+
+
+function preloadSounds() {
+    paddleHitSound.load();
+    brickHitSound.load();
+}
+
 // Initialisation du jeu
 function initGame() {
     // Configurer le canvas
@@ -48,6 +58,9 @@ function initGame() {
 
     // Créer les briques
     createBricks();
+
+    // Précharger les sons
+    preloadSounds();
 
     // Redessiner tout
     draw();
@@ -187,6 +200,7 @@ function draw() {
 
                 ballDX = speed * Math.sin(angle);
                 ballDY = -speed * Math.cos(angle);
+                paddleHitSound.play(); // Jouer le son ici
             } else {
                 // Balle perdue
                 lives--;
@@ -230,7 +244,7 @@ function collisionDetection() {
                     brick.status = 0;
                     score += 10;
                     updateScoreDisplay();
-
+                    brickHitSound.play(); // Jouer le son ici
                     // Appliquer l'effet selon le type de brique
                     applyBrickEffect(brick.type);
 
